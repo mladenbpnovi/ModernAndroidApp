@@ -17,8 +17,9 @@ class RepositoryRecyclerViewAdapter(private var items: ArrayList<Repository>,
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int)
-            = holder.bind(items[position], listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
 
     override fun getItemCount(): Int = items.size
 
@@ -31,18 +32,17 @@ class RepositoryRecyclerViewAdapter(private var items: ArrayList<Repository>,
         notifyDataSetChanged()
     }
 
-    class ViewHolder(private var binding: RvItemRepositoryBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: RvItemRepositoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(repo: Repository, listener: OnItemClickListener?) {
-            binding.repository = repo
-            if (listener != null) {
-                binding.root.setOnClickListener({ _ -> listener.onItemClick(layoutPosition) })
-            }
+        fun bind(repo: Repository) {
+            binding.repositoryNameTextView.text = repo.repositoryName
+            binding.repositoryOwnerTextView.text = repo.repositoryOwner
+            binding.numberOfStarsTextView.text = repo.numberOfStars.toString()
+            binding.repositoryHasIssuesTextView.visibility =
+                if (repo.hasIssues) View.VISIBLE else View.GONE
 
-            binding.executePendingBindings()
+            binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
         }
     }
-
 }
-

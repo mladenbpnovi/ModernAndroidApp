@@ -1,8 +1,8 @@
 package me.mladenrakonjac.modernandroidapp.ui.screens.main
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
@@ -17,17 +17,18 @@ import javax.inject.Inject
  */
 class MainViewModel @Inject constructor(var gitRepoRepository: GitRepoRepository) : ViewModel() {
 
+    private val _text = MutableLiveData("old data")
+    val text: LiveData<String> = _text
 
-    val text = ObservableField("old data")
-
-    val isLoading = ObservableField(false)
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
 
     var repositories = MutableLiveData<ArrayList<Repository>>()
 
     private val compositeDisposable = CompositeDisposable()
 
     fun loadRepositories() {
-        isLoading.set(true)
+        _isLoading.value = true
         compositeDisposable += gitRepoRepository
                 .getRepositories()
                 .subscribeOn(Schedulers.newThread())
@@ -44,7 +45,7 @@ class MainViewModel @Inject constructor(var gitRepoRepository: GitRepoRepository
             }
 
             override fun onComplete() {
-                isLoading.set(false)
+                _isLoading.value = false
             }
         })
     }
