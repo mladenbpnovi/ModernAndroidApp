@@ -53,6 +53,7 @@
             android:onClick="@{() -> viewModel.loadRepositories()}"
             android:clickable="@{viewModel.isLoading ? false : true}"
             android:text="Load Data"
+            android:backgroundTint="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
